@@ -2,33 +2,34 @@
 #include <stdlib.h>
 
 int StrengLength(char *text);
+void getInput(char **text, int size);
+void reverseString(char *text, char **reverse, int length);
 
 int main() {
-    char *text = malloc(30 * sizeof(char));
+    int a; 
+    printf("Enter the size of the string: ");
+    scanf("%d", &a);
+
+    char *text = malloc(a * sizeof(char));
     if (text == NULL) { 
-        printf("no memory allocated\n");
-	return 1;
+        printf("No memory allocated\n");
+        return 1;
     }
 
-     printf("please enter text: ");
-       fgets(text, 30, stdin); 
-	for(int i=0 ; i<=30; i++){
-		printf("%c", text[i]);
-	}
-	printf("\n");
+    getInput(&text, a); 
 
     int length = StrengLength(text); 
-      printf("Length: %d\n", length);
+    printf("Length: %d\n", length);
 
-      text= realloc(text, length *sizeof(char));
-      // printf("%lu",sizeof(text));
+    char *reverse = malloc((length + 1) * sizeof(char));
+    if (reverse == NULL) {
+        printf("No memory allocated for reverse\n");
+        free(text);
+        return 1;
+    }
 
-     char *reverse = malloc(length * sizeof(char));
-  	for(int j=0;j<=length; j++ ){
-	    reverse[j]=text[length-j];
-		printf("%c", reverse[j]);
-	}
-	printf("\n");
+    reverseString(text, &reverse, length);
+    printf("Reversed: %s\n", reverse);
 
     free(text);
     free(reverse);
@@ -37,10 +38,23 @@ int main() {
 }
 
 int StrengLength(char *text) {
-    int count= 0;
-    for (int i= 0; text[i]!= '\0' && text[i]!= '\n'; i++) {
+    int count = 0;
+    for (int i = 0; text[i] != '\0' && text[i] != '\n'; i++) {
         count++;
     }
     return count;
+}
+
+void getInput(char **text, int size) {
+    printf("Please enter text: ");
+    getchar();
+    fgets(*text, size, stdin); 
+}
+
+void reverseString(char *text, char **reverse, int length) {
+    for(int j = 0; j < length; j++) {
+        (*reverse)[j] = text[length - 1 - j];
+    }
+    (*reverse)[length] = '\0';
 }
 
